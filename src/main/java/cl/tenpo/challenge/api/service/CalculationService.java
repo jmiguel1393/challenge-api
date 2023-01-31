@@ -1,6 +1,7 @@
 package cl.tenpo.challenge.api.service;
 
 import cl.tenpo.challenge.api.client.TenpoClient;
+import cl.tenpo.challenge.api.dto.CalculationDto;
 import cl.tenpo.challenge.api.util.DataUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,9 +11,13 @@ import org.springframework.stereotype.Service;
 public class CalculationService {
     private final TenpoClient tenpoClient;
 
-    public Double applyCalculation(Integer firstNumber, Integer secondNumber) {
+    public CalculationDto calculatePercentage(Integer firstNumber, Integer secondNumber) {
         Integer percentage = tenpoClient.getPercentage(firstNumber, secondNumber);
-        Integer sum = DataUtil.calculateSum(firstNumber, secondNumber);
-        return DataUtil.applyPercentage(sum, percentage);
+        if (percentage != null) {
+            Integer sum = DataUtil.calculateSum(firstNumber, secondNumber);
+            Double percentageApplied = DataUtil.applyPercentage(sum, percentage);
+            return CalculationDto.builder().percentage(percentageApplied).build();
+        }
+        return null;
     }
 }
