@@ -6,6 +6,11 @@ public class DataUtil {
     }
 
     public static Double applyPercentage(Integer sum, Integer percentage) {
-        return sum.doubleValue() * (1 + (percentage.doubleValue() / 100));
+        Double sumWithPercentage = sum.doubleValue() * (1 + (percentage.doubleValue() / 100));
+        return roundToTwoDecimalPlaces(sumWithPercentage);
+    }
+
+    private static Double roundToTwoDecimalPlaces(Double number) {
+        return Math.round(number * 100.0) / 100.0;
     }
 }
