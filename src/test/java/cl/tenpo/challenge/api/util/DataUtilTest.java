@@ -9,4 +9,9 @@ class DataUtilTest {
     void shouldCalculateTheSumOfTwoNumbers() {
         assertEquals(10, DataUtil.calculateSum(5, 5));
     }
+
+    @Test
+    void shouldApplyPercentageToSum() {
+        assertEquals(11, DataUtil.applyPercentage(10, 10));
+    }
 }
