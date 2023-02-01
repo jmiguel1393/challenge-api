@@ -21,7 +21,10 @@ public class ResponseLog {
 
     private String uuid;
     private String headers;
+
+    @Column(columnDefinition="text")
     private String body;
+
     private LocalDateTime createdAt;
 
 }

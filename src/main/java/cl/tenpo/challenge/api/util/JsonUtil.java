@@ -10,7 +10,7 @@ public class JsonUtil {
         try {
             json = mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return json;
     }
