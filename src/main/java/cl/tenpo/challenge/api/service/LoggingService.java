@@ -9,21 +9,21 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
 public class LoggingService {
     private final TransactionRepository transactionRepository;
+    private final Function<HttpServletRequest, Transaction> transactionConverter;
 
     public void logRequest(HttpServletRequest request, Object body) {
         Map<String, String> parameters = getParameters(request);
-        Transaction transaction = Transaction.builder()
-                .method(request.getMethod())
-                .path(request.getRequestURI())
-                .requestHeaders(Collections.list(request.getHeaders("")).toString())
-                .createdAt(LocalDateTime.now())
-                .build();
+        Transaction transaction = transactionConverter.apply(request);
         if (!parameters.isEmpty()) {
             transaction.setParameters(parameters.toString());
         }
@@ -37,7 +37,8 @@ public class LoggingService {
     }
 
     public void logResponse(HttpServletRequest request, HttpServletResponse response, Object body) {
-        Transaction transaction = transactionRepository.findById((Long) request.getSession().getAttribute("trx_id")).orElse(Transaction.builder().build());
+        Transaction transaction = transactionRepository.findById((Long) request.getSession().getAttribute("trx_id"))
+                .orElse(Transaction.builder().build());
         Map<String, String> headers = getHeaders(response);
         if (!headers.isEmpty()) {
             transaction.setResponseHeaders(headers.toString());
