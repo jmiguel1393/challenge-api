@@ -15,8 +15,10 @@ public class ApiClient {
 
     public Integer getPercentage(Integer firstNumber, Integer secondNumber) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(
-                buildUrl(url, firstNumber, secondNumber), Integer.class);
+        PercentageResponse percentageResponse = restTemplate.getForObject(
+                buildUrl(url, firstNumber, secondNumber), PercentageResponse.class);
+        assert percentageResponse != null;
+        return percentageResponse.getPercentage();
     }
 
     private String buildUrl(String url, Integer firstNumber, Integer secondNumber) {
