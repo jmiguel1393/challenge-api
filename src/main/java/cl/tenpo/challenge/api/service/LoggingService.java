@@ -1,5 +1,6 @@
 package cl.tenpo.challenge.api.service;
 
+import cl.tenpo.challenge.api.constant.SessionAttribute;
 import cl.tenpo.challenge.api.repository.RequestLogRepository;
 import cl.tenpo.challenge.api.repository.ResponseLogRepository;
 import cl.tenpo.challenge.api.repository.model.RequestLog;
@@ -23,7 +24,7 @@ public class LoggingService {
     private final Function<HttpServletRequest, RequestLog> requestLogConverter;
 
     public void logRequest(HttpServletRequest request, Object body) {
-        request.getSession().setAttribute("trx_id", UUID.randomUUID().toString());
+        request.getSession().setAttribute(SessionAttribute.TRANSACTION_ID, UUID.randomUUID().toString());
         saveRequest(request, body);
     }
 
@@ -52,7 +53,7 @@ public class LoggingService {
 
     private ResponseLog buildResponseLog(HttpServletRequest request, Object body) {
         return ResponseLog.builder()
-                .uuid((String) request.getSession().getAttribute("trx_id"))
+                .uuid((String) request.getSession().getAttribute(SessionAttribute.TRANSACTION_ID))
                 .body(JsonUtil.objectToJson(body))
                 .createdAt(LocalDateTime.now())
                 .build();

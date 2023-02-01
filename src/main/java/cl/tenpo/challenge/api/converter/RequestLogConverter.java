@@ -1,5 +1,6 @@
 package cl.tenpo.challenge.api.converter;
 
+import cl.tenpo.challenge.api.constant.SessionAttribute;
 import cl.tenpo.challenge.api.repository.model.RequestLog;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ public class RequestLogConverter implements Function<HttpServletRequest, Request
                 .headers(Collections.list(request.getHeaders("")).toString())
                 .method(request.getMethod())
                 .path(request.getRequestURI())
-                .uuid((String) request.getSession().getAttribute("trx_id"))
+                .uuid((String) request.getSession().getAttribute(SessionAttribute.TRANSACTION_ID))
                 .createdAt(LocalDateTime.now())
                 .build();
     }
