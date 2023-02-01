@@ -1,0 +1,13 @@
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+spring:
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
