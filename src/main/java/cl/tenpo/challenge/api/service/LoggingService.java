@@ -55,6 +55,8 @@ public class LoggingService {
         return ResponseLog.builder()
                 .uuid((String) request.getSession().getAttribute(SessionAttribute.TRANSACTION_ID))
                 .body(JsonUtil.objectToJson(body))
+                .method(request.getMethod())
+                .path(request.getRequestURI())
                 .createdAt(LocalDateTime.now())
                 .build();
     }
