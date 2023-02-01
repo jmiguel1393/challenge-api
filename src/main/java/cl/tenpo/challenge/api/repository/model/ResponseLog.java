@@ -19,10 +19,12 @@ public class ResponseLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String method;
+    private String path;
     private String uuid;
     private String headers;
 
-    @Column(columnDefinition="text")
+    @Column(columnDefinition = "text")
     private String body;
 
     private LocalDateTime createdAt;

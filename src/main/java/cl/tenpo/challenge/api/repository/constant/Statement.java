@@ -8,4 +8,8 @@ public class Statement {
             + "rs.headers AS responseHeaders "
             + "FROM request_logs rq INNER JOIN response_logs rs "
             + "ON rq.uuid = rs.uuid ";
+
+    public static final String RESPONSE_LOG_SEARCH_STATEMENT = "SELECT body FROM response_logs WHERE "
+            + "method = :method AND path = :path "
+            + "ORDER BY created_at DESC LIMIT 1";
 }

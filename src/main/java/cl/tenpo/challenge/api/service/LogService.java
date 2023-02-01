@@ -4,6 +4,7 @@ import cl.tenpo.challenge.api.dto.LogDTO;
 import cl.tenpo.challenge.api.dto.TransactionDTO;
 import cl.tenpo.challenge.api.projection.LogProjection;
 import cl.tenpo.challenge.api.repository.RequestLogRepository;
+import cl.tenpo.challenge.api.repository.ResponseLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LogService {
     private final RequestLogRepository requestLogRepository;
+    private final ResponseLogRepository responseLogRepository;
 
     public List<LogDTO> getAllLogs(Pageable pageable) {
         Iterable<LogProjection> logs =
@@ -24,6 +26,10 @@ public class LogService {
         List<LogDTO> logsDTO = new ArrayList<>();
         logs.forEach(log -> logsDTO.add(buildLogDTO(log)));
         return logsDTO;
+    }
+
+    public String getLastPercentageResponse() {
+        return responseLogRepository.findLastResponseByMethodAndPath("GET", "/calculations/percentages");
     }
 
     private LogDTO buildLogDTO(LogProjection log) {
