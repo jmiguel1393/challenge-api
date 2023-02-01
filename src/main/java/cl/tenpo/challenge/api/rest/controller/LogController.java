@@ -27,6 +27,6 @@ public class LogController {
                                                         Integer page) {
         Pageable pageable = PageRequest.of(page, pageSize);
         List<LogDTO> logs = logService.getAllLogs(pageable);
-        return new ResponseEntity<>(logs, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(logs, HttpStatus.OK);
     }
 }

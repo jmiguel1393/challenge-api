@@ -20,4 +20,8 @@ public interface LogProjection {
     LocalDateTime getResponseDate();
 
     String getResponseHeaders();
+
+    void setRequestDate(LocalDateTime requestDate);
+
+    void setResponseDate(LocalDateTime responseDate);
 }
