@@ -1,3 +1,7 @@
+management:
+  health:
+    circuitbreakers:
+      enabled: true
 spring:
   profiles:
     active: dev

@@ -1,3 +1,22 @@
+config:
+  api:
+    url: https://mock-api-o8ry.onrender.com
+resilience4j:
+  circuitbreaker:
+    instances:
+      percentageapicalls:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+        permittedNumberOfCallsInHalfOpenState: 4
+        minimumNumberOfCalls: 10
+        waitDurationInOpenState: 5s
+        slowCallRateThreshold: 50
+        slowCallDurationThreshold: 10
+        failureRateThreshold: 50
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
+    username: jmiguelnr
+    password: 123456
+    url: jdbc:postgresql://localhost:5432/postgres
