@@ -1,7 +1,7 @@
 package cl.tenpo.challenge.api.service;
 
 import cl.tenpo.challenge.api.client.TenpoClient;
-import cl.tenpo.challenge.api.dto.CalculationDto;
+import cl.tenpo.challenge.api.dto.CalculationDTO;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -19,7 +19,7 @@ class CalculationServiceTest {
     void shouldCalculatePercentageBetweenTwoNumbersAndReturnAnIntegerNumber() {
         when(tenpoClient.getPercentage(5, 5)).thenReturn(10);
         CalculationService calculationService = new CalculationService(tenpoClient);
-        CalculationDto calculation = calculationService.calculatePercentage(5, 5);
+        CalculationDTO calculation = calculationService.calculatePercentage(5, 5);
         assertEquals(11, calculation.getPercentage());
     }
 
@@ -27,7 +27,7 @@ class CalculationServiceTest {
     void shouldCalculatePercentageBetweenTwoNumbersAndReturnAnDecimalNumber() {
         when(tenpoClient.getPercentage(6, 6)).thenReturn(12);
         CalculationService calculationService = new CalculationService(tenpoClient);
-        CalculationDto calculation = calculationService.calculatePercentage(6, 6);
+        CalculationDTO calculation = calculationService.calculatePercentage(6, 6);
         assertEquals(13.44, calculation.getPercentage());
     }
 }
