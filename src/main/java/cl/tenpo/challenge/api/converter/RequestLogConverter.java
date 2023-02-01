@@ -1,6 +1,6 @@
 package cl.tenpo.challenge.api.converter;
 
-import cl.tenpo.challenge.api.repository.model.Transaction;
+import cl.tenpo.challenge.api.repository.model.RequestLog;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,13 +9,14 @@ import java.util.Collections;
 import java.util.function.Function;
 
 @Component
-public class TransactionConverter implements Function<HttpServletRequest, Transaction> {
+public class RequestLogConverter implements Function<HttpServletRequest, RequestLog> {
     @Override
-    public Transaction apply(HttpServletRequest request) {
-        return Transaction.builder()
+    public RequestLog apply(HttpServletRequest request) {
+        return RequestLog.builder()
+                .headers(Collections.list(request.getHeaders("")).toString())
                 .method(request.getMethod())
                 .path(request.getRequestURI())
-                .requestHeaders(Collections.list(request.getHeaders("")).toString())
+                .uuid((String) request.getSession().getAttribute("trx_id"))
                 .createdAt(LocalDateTime.now())
                 .build();
     }

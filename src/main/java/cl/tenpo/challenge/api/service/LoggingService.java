@@ -1,53 +1,62 @@
 package cl.tenpo.challenge.api.service;
 
-import cl.tenpo.challenge.api.repository.TransactionRepository;
-import cl.tenpo.challenge.api.repository.model.Transaction;
+import cl.tenpo.challenge.api.repository.RequestLogRepository;
+import cl.tenpo.challenge.api.repository.ResponseLogRepository;
+import cl.tenpo.challenge.api.repository.model.RequestLog;
+import cl.tenpo.challenge.api.repository.model.ResponseLog;
 import cl.tenpo.challenge.api.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
 public class LoggingService {
-    private final TransactionRepository transactionRepository;
-    private final Function<HttpServletRequest, Transaction> transactionConverter;
+    private final RequestLogRepository requestLogRepository;
+    private final ResponseLogRepository responseLogRepository;
+    private final Function<HttpServletRequest, RequestLog> requestLogConverter;
 
     public void logRequest(HttpServletRequest request, Object body) {
+        request.getSession().setAttribute("trx_id", UUID.randomUUID().toString());
+        saveRequest(request, body);
+    }
+
+    @Async
+    void saveRequest(HttpServletRequest request, Object body) {
         Map<String, String> parameters = getParameters(request);
-        Transaction transaction = transactionConverter.apply(request);
+        RequestLog requestLog = requestLogConverter.apply(request);
         if (!parameters.isEmpty()) {
-            transaction.setParameters(parameters.toString());
+            requestLog.setParameters(parameters.toString());
         }
         if (!Objects.isNull(body)) {
-            transaction.setRequestBody(JsonUtil.objectToJson(body));
+            requestLog.setBody(JsonUtil.objectToJson(body));
         }
-        transactionRepository.save(transaction);
-        if (transaction.getId() != null) {
-            request.getSession().setAttribute("trx_id", transaction.getId());
-        }
+        requestLogRepository.save(requestLog);
     }
 
+    @Async
     public void logResponse(HttpServletRequest request, HttpServletResponse response, Object body) {
-        Transaction transaction = transactionRepository.findById((Long) request.getSession().getAttribute("trx_id"))
-                .orElse(Transaction.builder().build());
+        ResponseLog responseLog = buildResponseLog(request, body);
         Map<String, String> headers = getHeaders(response);
         if (!headers.isEmpty()) {
-            transaction.setResponseHeaders(headers.toString());
+            responseLog.setHeaders(headers.toString());
         }
-        transaction.setResponseBody(JsonUtil.objectToJson(body));
-        transaction.setUpdatedAt(LocalDateTime.now());
-        transactionRepository.save(transaction);
+        responseLogRepository.save(responseLog);
     }
 
+    private ResponseLog buildResponseLog(HttpServletRequest request, Object body) {
+        return ResponseLog.builder()
+                .uuid((String) request.getSession().getAttribute("trx_id"))
+                .body(JsonUtil.objectToJson(body))
+                .createdAt(LocalDateTime.now())
+                .build();
+    }
 
     private Map<String, String> getParameters(HttpServletRequest request) {
         Map<String, String> parameters = new HashMap<>();

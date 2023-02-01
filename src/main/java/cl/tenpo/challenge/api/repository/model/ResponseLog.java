@@ -9,26 +9,19 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "transactions")
+@Table(name = "response_logs")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Data
-public class Transaction {
+public class ResponseLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String method;
-    private String path;
-    private String parameters;
-    private String requestHeaders;
-    private String requestBody;
-
-    private String responseHeaders;
-    private String responseBody;
-
+    private String uuid;
+    private String headers;
+    private String body;
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
 }
