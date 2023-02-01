@@ -40,4 +40,5 @@ mvn test
 ```
 
 ## Documentation
-- [Swagger Documentation](http://localhost:8080/swagger-ui.html)
+- [Swagger](https://swagger.io/)
+- Once the project is UP, you can access it from http://localhost:8080/swagger-ui.html
