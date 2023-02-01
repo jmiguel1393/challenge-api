@@ -15,14 +15,4 @@ public class ChallengeApiApplication {
         SpringApplication.run(ChallengeApiApplication.class, args);
     }
 
-    @Bean
-    TaskExecutor loggingTaskExecutor() {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(2);
-        executor.setMaxPoolSize(10);
-        executor.setQueueCapacity(20);
-        executor.setKeepAliveSeconds(120);
-        executor.initialize();
-        return executor;
-    }
 }
